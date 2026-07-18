@@ -1,0 +1,122 @@
+<div class="forum-container animate-fade-in">
+  <div class="forum-header">
+    <div class="forum-title-group">
+      <h1 class="page-title">Foro de la Comunidad</h1>
+      <p class="page-subtitle">Pide próximas recetas, deja reseñas y comparte tu feedback con nosotros.</p>
+    </div>
+    
+    @if (auth.isLoggedIn()) {
+      <button (click)="showForm.set(!showForm())" class="btn btn-primary new-post-btn">
+        <ng-icon name="heroPencilSquare" size="18" />
+        {{ showForm() ? 'Cancelar' : 'Nueva Publicación' }}
+      </button>
+    } @else {
+      <div class="auth-prompt-banner">
+        <p>¿Quieres pedir una receta o dejar una reseña? <a routerLink="/login" class="link-amber">Inicia sesión aquí</a></p>
+      </div>
+    }
+  </div>
+
+  <!-- Formulario para crear post -->
+  @if (showForm() && auth.isLoggedIn()) {
+    <div class="post-form-card animate-slide-up">
+      <h3 class="form-title">Crear nueva publicación</h3>
+      @if (createError()) {
+        <div class="error-box"><p>{{ createError() }}</p></div>
+      }
+      <form (ngSubmit)="submitPost()" class="create-form">
+        <div class="form-group">
+          <label class="form-label">Título</label>
+          <input type="text" [(ngModel)]="newTitle" name="title" class="form-control" placeholder="Ej. Por favor suban receta de Tacos de Birria" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tipo de publicación</label>
+            <select [(ngModel)]="newPostType" name="postType" class="form-control select-control">
+              <option value="request">Pedir próxima receta</option>
+              <option value="review">Reseña o Comentario general</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Detalles / Contenido</label>
+          <textarea [(ngModel)]="newContent" name="content" class="form-control text-area-control" rows="5" placeholder="Cuéntanos más detalles..." required></textarea>
+        </div>
+
+        <button type="submit" [disabled]="creating()" class="btn btn-primary submit-btn">
+          {{ creating() ? 'Publicando...' : 'Publicar' }}
+        </button>
+      </form>
+    </div>
+  }
+
+  <!-- Filtros e información -->
+  <div class="forum-filters-toolbar">
+    <div class="filter-tabs">
+      <button (click)="setFilter('all')" class="filter-tab" [class.active]="filterType() === 'all'">Todos</button>
+      <button (click)="setFilter('request')" class="filter-tab" [class.active]="filterType() === 'request'">Peticiones</button>
+      <button (click)="setFilter('review')" class="filter-tab" [class.active]="filterType() === 'review'">Reseñas</button>
+    </div>
+
+    <div class="sort-selector">
+      <span class="sort-label">Ordenar por:</span>
+      <button (click)="setSort('newest')" class="sort-btn" [class.active]="sortType() === 'newest'">Recientes</button>
+      <button (click)="setSort('popular')" class="sort-btn" [class.active]="sortType() === 'popular'">Populares</button>
+    </div>
+  </div>
+
+  <!-- Listado de Posts -->
+  @if (loading()) {
+    <div class="forum-loading-state">
+      <p>Cargando publicaciones del foro...</p>
+    </div>
+  } @else if (posts().length > 0) {
+    <div class="posts-list">
+      @for (post of posts(); track post.id) {
+        <div class="post-card">
+          <div class="post-card-header">
+            <div class="post-user-info">
+              <div class="user-avatar">
+                <ng-icon name="heroUser" size="18" />
+              </div>
+              <div class="user-meta-details">
+                <span class="post-username">{{ post.username }}</span>
+                <span class="post-date">{{ post.createdAt  }}</span>
+              </div>
+            </div>
+            
+            <span class="post-type-badge" [class.badge-request]="post.postType === 'request'" [class.badge-review]="post.postType === 'review'">
+              {{ post.postType === 'request' ? 'Petición' : 'Reseña' }}
+            </span>
+          </div>
+
+          <div class="post-card-body">
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-content">{{ post.content }}</p>
+          </div>
+
+          <div class="post-card-footer">
+            <button (click)="toggleLike(post)" class="like-btn" [class.liked]="post.userHasLiked" [disabled]="!auth.isLoggedIn()">
+              <ng-icon name="heroHandThumbUp" size="16" />
+              <span>{{ post.likesCount }} {{ post.likesCount === 1 ? 'Me gusta' : 'Me gustas' }}</span>
+            </button>
+
+            @if (auth.isLoggedIn() && (auth.user()?.id === post.userId || auth.user()?.role === 'admin')) {
+              <button (click)="deletePost(post.id)" class="delete-btn">
+                <ng-icon name="heroXMark" size="16" />
+                <span>Eliminar</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="empty-state-large">
+      <p class="empty-state-large-title">No hay publicaciones disponibles</p>
+      <p class="empty-state-large-subtitle">Sé el primero en dejar una reseña o solicitar una receta.</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,87 @@
+@if (loading()) {
+  <div class="not-found animate-fade-in">
+    <p class="not-found-text">Cargando receta...</p>
+  </div>
+} @else if (recipe(); as r) {
+  <div class="recipe-detail-container animate-fade-in">
+    <!-- Hero Image -->
+    <div class="detail-hero">
+      <img [src]="r.imageUrl" [alt]="r.title" class="detail-image" />
+    </div>
+
+    <!-- Header Info -->
+    <div class="detail-header">
+      <span class="detail-badge">
+        {{ categoryLabel(r.category) }}
+      </span>
+      <h1 class="detail-title">{{ r.title }}</h1>
+      <p class="detail-description">{{ r.description }}</p>
+      <div class="detail-meta">
+        <span>{{ r.cookTime }}</span>
+        <span>{{ difficultyLabel(r.difficulty) }}</span>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="detail-content-grid">
+      <!-- Ingredients -->
+      <div class="ingredients-section">
+        <h3 class="section-title">Ingredientes</h3>
+        <ul class="ingredients-list">
+          @for (ing of r.ingredients; track ing) {
+            <li
+              class="ingredient-item"
+              [class.ingredient-allergen]="isAllergen(ing)"
+            >
+              <span
+                class="ingredient-name"
+                [class.text-allergen]="isAllergen(ing)"
+              >
+                {{ ing }}
+                @if (isAllergen(ing)) {
+                  <ng-icon name="heroExclamationTriangle" size="14" class="icon-allergen" />
+                }
+              </span>
+              @if (auth.isLoggedIn()) {
+                <button
+                  (click)="toggleFav(ing)"
+                  class="fav-btn"
+                  [class.fav-active]="isFavorite(ing)"
+                >
+                  <ng-icon name="heroHeart" size="14" />
+                  <span>Favorito</span>
+                </button>
+              }
+            </li>
+          }
+        </ul>
+
+        @if (userAllergens().length > 0) {
+          <div class="allergen-warning animate-fade-in">
+            <p>Esta receta contiene ingredientes que marcaste como alergenos.</p>
+          </div>
+        }
+      </div>
+
+      <!-- Instructions — steps ahora son objetos {stepNumber, description} -->
+      <div class="instructions-section">
+        <h3 class="section-title">Instrucciones</h3>
+        <ol class="instructions-list">
+          @for (step of r.steps; track step.stepNumber) {
+            <li class="instruction-step animate-fade-in" [style.animation-delay]="(step.stepNumber - 1) * 0.1 + 's'">
+              <span class="step-number">{{ step.stepNumber }}</span>
+              <p class="step-text">{{ step.description }}</p>
+            </li>
+          }
+        </ol>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="not-found animate-fade-in">
+    <p class="not-found-text">Receta no encontrada</p>
+    <a routerLink="/" class="link-amber back-link">
+      Volver al inicio
+    </a>
+  </div>
+}

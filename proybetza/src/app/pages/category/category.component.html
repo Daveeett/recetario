@@ -1,0 +1,18 @@
+<div class="page-layout animate-fade-in">
+  <div class="section-header">
+    <div class="section-indicator indicator-amber-wide"></div>
+    <h2 class="section-title">{{ label() }}</h2>
+    <span class="category-count">({{ recipes().length }} recetas)</span>
+  </div>
+  @if (recipes().length > 0) {
+    <div class="recipe-grid animate-stagger">
+      @for (recipe of recipes(); track recipe.id) {
+        <app-recipe-card [recipe]="recipe" />
+      }
+    </div>
+  } @else {
+    <div class="empty-state-large">
+      <p class="empty-state-large-title">No se encontraron recetas en esta categoria.</p>
+    </div>
+  }
+</div>

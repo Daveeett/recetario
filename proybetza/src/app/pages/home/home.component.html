@@ -1,0 +1,80 @@
+<div class="page-container">
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <img
+      src="https://images.vexels.com/media/users/3/206897/raw/c9f9e454ca16989ff8211db4478afcd5-maqueta-de-logotipo-de-composicion-de-cocina.jpg"
+      alt="Cocina"
+      class="hero-image"
+    />
+    <div class="hero-overlay">
+      <div class="hero-content animate-slide-up">
+        <h1 class="hero-title">
+          Descubre recetas increibles
+        </h1>
+        <p class="hero-subtitle">
+          Explora dulces, salados, postres y mas. Encuentra tu proxima receta favorita.
+        </p>
+        <div class="hero-actions">
+          @if (auth.isLoggedIn()) {
+            <a routerLink="/preferences" class="btn btn-primary">
+              Personalizar
+              <ng-icon name="heroArrowRight" size="18" />
+            </a>
+          } @else {
+            <a routerLink="/login" class="btn btn-primary">
+              Iniciar sesion
+              <ng-icon name="heroArrowRight" size="18" />
+            </a>
+          }
+          <a routerLink="/category/dulce" class="btn btn-secondary">
+            Ver dulces
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommended Section (solo si logueado) -->
+  @if (auth.isLoggedIn()) {
+    <section class="content-section">
+      <div class="section-header">
+        <div class="section-indicator indicator-amber"></div>
+        <h2 class="section-title">Recomendado para ti</h2>
+      </div>
+      @if (loadingRecommended()) {
+        <div class="empty-state"><p class="empty-state-text">Cargando recomendaciones...</p></div>
+      } @else if (recommended().length > 0) {
+        <div class="recipe-grid animate-stagger">
+          @for (recipe of recommended(); track recipe.id) {
+            <app-recipe-card [recipe]="recipe" />
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <p class="empty-state-text">
+            Selecciona ingredientes favoritos en
+            <a routerLink="/preferences" class="link-amber">Preferencias</a>
+            para recibir recomendaciones personalizadas.
+          </p>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Discover Section -->
+  <section class="content-section">
+    <div class="section-header">
+      <div class="section-indicator indicator-yellow"></div>
+      <h2 class="section-title">Descubre</h2>
+    </div>
+    @if (loading()) {
+      <div class="empty-state"><p class="empty-state-text">Cargando recetas...</p></div>
+    } @else {
+      <div class="recipe-grid animate-stagger">
+        @for (recipe of shuffled(); track recipe.id) {
+          <app-recipe-card [recipe]="recipe" />
+        }
+      </div>
+    }
+  </section>
+</div>

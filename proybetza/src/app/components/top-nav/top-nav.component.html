@@ -1,0 +1,46 @@
+<header class="top-nav">
+  <div class="top-nav-inner">
+    <a routerLink="/" class="brand">
+      <span class="brand-logo">CB</span>
+      <span class="brand-text">Mockup</span>
+    </a>
+    
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <input
+          type="text"
+          [(ngModel)]="query"
+          (keyup.enter)="search()"
+          placeholder="Buscar recetas o ingredientes..."
+          class="search-input"
+        />
+        <ng-icon name="heroMagnifyingGlass" size="18" class="search-icon" />
+      </div>
+    </div>
+    
+    <div class="nav-actions-group">
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/preferences" class="nav-action">
+          <ng-icon name="heroHeart" size="20" />
+          <span class="nav-action-text">Favoritos</span>
+        </a>
+
+        <div class="user-profile-badge">
+          <ng-icon name="heroUser" size="18" />
+          <span class="username-display">{{ auth.user()?.username }}</span>
+        </div>
+
+        <button (click)="logout()" class="logout-action-btn" title="Cerrar Sesión">
+          <ng-icon name="heroArrowRightOnRectangle" size="20" />
+        </button>
+      } @else {
+        <a routerLink="/login" class="login-link-btn">
+          <span>Iniciar Sesión</span>
+        </a>
+        <a routerLink="/register" class="btn btn-primary register-link-btn">
+          <span>Registrarse</span>
+        </a>
+      }
+    </div>
+  </div>
+</header>

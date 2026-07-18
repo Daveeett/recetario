@@ -1,0 +1,91 @@
+<div class="preferences-container animate-fade-in">
+  <!-- Header -->
+  <div class="preferences-header">
+    <h1 class="page-title">Preferencias</h1>
+    <p class="page-subtitle">
+      Selecciona tus ingredientes favoritos y alergenos para personalizar tus recomendaciones.
+    </p>
+  </div>
+
+  @if (!auth.isLoggedIn()) {
+    <div class="info-box">
+      <p class="info-box-text">
+        Debes <a routerLink="/login" class="link-amber">iniciar sesion</a> para guardar tus preferencias.
+      </p>
+    </div>
+  } @else {
+    <!-- Favorite Ingredients -->
+    <section class="preferences-section">
+      <div class="section-heading">
+        <div class="section-indicator indicator-amber-small"></div>
+        <h2 class="section-title">Ingredientes Favoritos</h2>
+      </div>
+      <p class="section-description">
+        El FYP recomendara mas recetas que contengan estos ingredientes.
+      </p>
+      <div class="chip-group">
+        @for (ing of allIngredients(); track ing) {
+          <button
+            (click)="toggleFav(ing)"
+            class="chip"
+            [class.chip-amber-active]="isFav(ing)"
+          >
+            {{ ing }}
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- Intolerances and Common Allergies -->
+    <section class="preferences-section">
+      <div class="section-heading">
+        <div class="section-indicator indicator-red-small"></div>
+        <h2 class="section-title">Intolerancias y Alergias Comunes</h2>
+      </div>
+      <p class="section-description">
+        Selecciona tus intolerancias o alergias generales. Excluiremos automáticamente recetas con ingredientes relacionados (ej. lácteos, trigo/gluten, pescados/mariscos, frutos secos, huevo).
+      </p>
+      <div class="card-group">
+        @for (intolerance of availableIntolerances; track intolerance) {
+          <button
+            (click)="toggleIntolerance(intolerance)"
+            class="intolerance-card"
+            [class.card-red-active]="isIntolerance(intolerance)"
+          >
+            <span class="card-title">{{ intolerance }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- Allergens -->
+    <section class="preferences-section">
+      <div class="section-heading">
+        <div class="section-indicator indicator-red-small"></div>
+        <h2 class="section-title">Alergias a Ingredientes Específicos</h2>
+      </div>
+      <p class="section-description">
+        Si eres alérgico a algún otro alimento en particular, selecciónalo aquí para excluirlo de tus recomendaciones.
+      </p>
+      <div class="chip-group">
+        @for (ing of allIngredients(); track ing) {
+          <button
+            (click)="toggleAllergen(ing)"
+            class="chip"
+            [class.chip-red-active]="isAllergen(ing)"
+          >
+            {{ ing }}
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- Info -->
+    <div class="info-box">
+      <p class="info-box-text">
+        Los cambios se guardan automáticamente en tu cuenta. El FYP se ajustará para recomendarte
+        recetas con tus ingredientes favoritos y evitar tus alérgenos e intolerancias.
+      </p>
+    </div>
+  }
+</div>

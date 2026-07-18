@@ -1,0 +1,17 @@
+# Root GitIgnore for RECETARIO
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntuser
+*.user
+.history/
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log

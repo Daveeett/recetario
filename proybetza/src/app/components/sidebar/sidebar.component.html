@@ -1,0 +1,56 @@
+<aside class="sidebar">
+  <div class="sidebar-content">
+    <h3 class="nav-section-title">Menú Principal</h3>
+    <nav class="nav-list">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+        class="nav-item"
+      >
+        <ng-icon name="heroHome" size="20" class="nav-icon" />
+        <span class="nav-text">Inicio</span>
+      </a>
+
+      <a
+        routerLink="/forum"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <ng-icon name="heroChatBubbleLeftRight" size="20" class="nav-icon" />
+        <span class="nav-text">Foro / Reseñas</span>
+      </a>
+    </nav>
+
+    <div class="nav-divider">
+      <h3 class="nav-section-title">Categorías</h3>
+      <nav class="nav-list">
+        @for (cat of categories; track cat.slug) {
+          <a
+            [routerLink]="['/category', cat.slug]"
+            routerLinkActive="active"
+            class="nav-item group"
+          >
+            <ng-icon [name]="cat.icon" size="20" class="nav-icon" />
+            <span class="nav-text flex-1">{{ cat.label }}</span>
+            <ng-icon name="heroChevronRight" size="16" class="nav-chevron" />
+          </a>
+        }
+      </nav>
+    </div>
+
+    <div class="nav-divider">
+      <h3 class="nav-section-title">Configuración</h3>
+      <nav class="nav-list">
+        <a
+          routerLink="/preferences"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <ng-icon name="heroCog6Tooth" size="20" class="nav-icon" />
+          <span class="nav-text">Preferencias</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+</aside>

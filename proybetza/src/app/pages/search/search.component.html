@@ -1,0 +1,25 @@
+<div class="page-layout animate-fade-in">
+  <h2 class="page-title">Resultados de busqueda</h2>
+  @if (query(); as q) {
+    <p class="page-subtitle">
+      Mostrando resultados para <strong>"{{ q }}"</strong>
+    </p>
+  }
+
+  @if (results().length > 0) {
+    <div class="recipe-grid animate-stagger">
+      @for (recipe of results(); track recipe.id) {
+        <app-recipe-card [recipe]="recipe" />
+      }
+    </div>
+  } @else if (query()) {
+    <div class="empty-state-large">
+      <p class="empty-state-large-title">No se encontraron recetas para "{{ query() }}"</p>
+      <p class="empty-state-large-subtitle">Prueba con otro termino de busqueda.</p>
+    </div>
+  } @else {
+    <div class="empty-state-large">
+      <p class="empty-state-large-title">Escribe algo para buscar recetas o ingredientes.</p>
+    </div>
+  }
+</div>

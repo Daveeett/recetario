@@ -1,0 +1,13 @@
+@if (isAuthRoute()) {
+  <main class="auth-layout animate-fade-in">
+    <router-outlet />
+  </main>
+} @else {
+  <app-top-nav />
+  <app-sidebar />
+  <main class="app-layout">
+    <div class="app-container animate-fade-in">
+      <router-outlet />
+    </div>
+  </main>
+}
