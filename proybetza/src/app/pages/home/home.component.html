@@ -1,59 +1,61 @@
-<div class="page-container">
+<div class="flex flex-col gap-10">
   <!-- Hero Banner -->
-  <section class="hero-banner">
-    <img
-      src="https://images.vexels.com/media/users/3/206897/raw/c9f9e454ca16989ff8211db4478afcd5-maqueta-de-logotipo-de-composicion-de-cocina.jpg"
-      alt="Cocina"
-      class="hero-image"
-    />
-    <div class="hero-overlay">
-      <div class="hero-content animate-slide-up">
-        <h1 class="hero-title">
-          Descubre recetas increibles
+  <div 
+    class="hero min-h-[320px] rounded-3xl overflow-hidden shadow-md relative bg-base-200" 
+    style="background-image: url('assets/logo.png');"
+  >
+    <div class="hero-overlay bg-black/60"></div>
+    <div class="hero-content text-neutral-content justify-start w-full p-8 md:p-12">
+      <div class="max-w-md md:max-w-lg">
+        <h1 class="text-3xl md:text-4xl font-black text-white leading-tight">
+          Descubre recetas increíbles
         </h1>
-        <p class="hero-subtitle">
-          Explora dulces, salados, postres y mas. Encuentra tu proxima receta favorita.
+        <p class="mt-3 text-sm md:text-base text-gray-200 leading-relaxed">
+          Explora dulces, salados, postres y más. Encuentra tu próxima receta favorita.
         </p>
-        <div class="hero-actions">
+        <div class="mt-6 flex flex-wrap items-center gap-3">
           @if (auth.isLoggedIn()) {
-            <a routerLink="/preferences" class="btn btn-primary">
+            <a routerLink="/preferences" class="btn btn-primary btn-sm md:btn-md rounded-full shadow-lg gap-2">
               Personalizar
-              <ng-icon name="heroArrowRight" size="18" />
+              <ng-icon name="heroArrowRight" size="16" />
             </a>
           } @else {
-            <a routerLink="/login" class="btn btn-primary">
-              Iniciar sesion
-              <ng-icon name="heroArrowRight" size="18" />
+            <a routerLink="/login" class="btn btn-primary btn-sm md:btn-md rounded-full shadow-lg gap-2">
+              Iniciar sesión
+              <ng-icon name="heroArrowRight" size="16" />
             </a>
           }
-          <a routerLink="/category/dulce" class="btn btn-secondary">
+          <a routerLink="/category/dulce" class="btn btn-ghost bg-white/10 hover:bg-white/20 text-white border-transparent btn-sm md:btn-md rounded-full">
             Ver dulces
           </a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Recommended Section (solo si logueado) -->
+  <!-- Recommended Section (only if logged in) -->
   @if (auth.isLoggedIn()) {
-    <section class="content-section">
-      <div class="section-header">
-        <div class="section-indicator indicator-amber"></div>
-        <h2 class="section-title">Recomendado para ti</h2>
+    <section class="flex flex-col">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-1.5 h-6 rounded-full bg-primary"></div>
+        <h2 class="text-2xl font-bold text-base-content">Recomendado para ti</h2>
       </div>
       @if (loadingRecommended()) {
-        <div class="empty-state"><p class="empty-state-text">Cargando recomendaciones...</p></div>
+        <div class="p-12 bg-base-100 border border-base-200 rounded-3xl text-center shadow-sm">
+          <span class="loading loading-spinner loading-md text-primary"></span>
+          <p class="text-base-content/50 mt-2 text-sm">Cargando recomendaciones...</p>
+        </div>
       } @else if (recommended().length > 0) {
-        <div class="recipe-grid animate-stagger">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-stagger">
           @for (recipe of recommended(); track recipe.id) {
             <app-recipe-card [recipe]="recipe" />
           }
         </div>
       } @else {
-        <div class="empty-state">
-          <p class="empty-state-text">
+        <div class="p-12 bg-base-100 border border-base-200 rounded-3xl text-center shadow-sm">
+          <p class="text-base-content/60 text-sm">
             Selecciona ingredientes favoritos en
-            <a routerLink="/preferences" class="link-amber">Preferencias</a>
+            <a routerLink="/preferences" class="link link-primary font-semibold">Preferencias</a>
             para recibir recomendaciones personalizadas.
           </p>
         </div>
@@ -62,15 +64,18 @@
   }
 
   <!-- Discover Section -->
-  <section class="content-section">
-    <div class="section-header">
-      <div class="section-indicator indicator-yellow"></div>
-      <h2 class="section-title">Descubre</h2>
+  <section class="flex flex-col">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-1.5 h-6 rounded-full bg-primary"></div>
+      <h2 class="text-2xl font-bold text-base-content">Descubre</h2>
     </div>
     @if (loading()) {
-      <div class="empty-state"><p class="empty-state-text">Cargando recetas...</p></div>
+      <div class="p-12 bg-base-100 border border-base-200 rounded-3xl text-center shadow-sm">
+        <span class="loading loading-spinner loading-md text-primary"></span>
+        <p class="text-base-content/50 mt-2 text-sm">Cargando recetas...</p>
+      </div>
     } @else {
-      <div class="recipe-grid animate-stagger">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-stagger">
         @for (recipe of shuffled(); track recipe.id) {
           <app-recipe-card [recipe]="recipe" />
         }

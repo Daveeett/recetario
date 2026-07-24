@@ -1,18 +1,25 @@
-<div class="page-layout animate-fade-in">
-  <div class="section-header">
-    <div class="section-indicator indicator-amber-wide"></div>
-    <h2 class="section-title">{{ label() }}</h2>
-    <span class="category-count">({{ recipes().length }} recetas)</span>
+<div class="max-w-[1440px] mx-auto flex flex-col gap-6 animate-fade-in">
+  <!-- Category Header -->
+  <div class="flex items-center gap-3">
+    <div class="w-1.5 h-6 rounded-full bg-primary"></div>
+    <h2 class="text-2xl font-bold text-base-content">{{ label() }}</h2>
+    <span class="badge badge-neutral font-semibold text-xs py-2 px-2.5">
+      {{ recipes().length }} {{ recipes().length === 1 ? 'receta' : 'recetas' }}
+    </span>
   </div>
+
+  <!-- Recipe Grid -->
   @if (recipes().length > 0) {
-    <div class="recipe-grid animate-stagger">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-stagger">
       @for (recipe of recipes(); track recipe.id) {
         <app-recipe-card [recipe]="recipe" />
       }
     </div>
   } @else {
-    <div class="empty-state-large">
-      <p class="empty-state-large-title">No se encontraron recetas en esta categoria.</p>
+    <div class="p-12 bg-base-100 border border-base-200 rounded-3xl text-center shadow-sm">
+      <p class="text-base-content/50 text-sm font-semibold">
+        No se encontraron recetas en esta categoría.
+      </p>
     </div>
   }
 </div>

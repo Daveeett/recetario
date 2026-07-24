@@ -1,34 +1,35 @@
-<div class="preferences-container animate-fade-in">
+<div class="max-w-3xl mx-auto flex flex-col gap-8 animate-fade-in">
   <!-- Header -->
-  <div class="preferences-header">
-    <h1 class="page-title">Preferencias</h1>
-    <p class="page-subtitle">
-      Selecciona tus ingredientes favoritos y alergenos para personalizar tus recomendaciones.
+  <div class="flex flex-col gap-2">
+    <h1 class="text-3xl font-black text-base-content">Preferencias</h1>
+    <p class="text-sm text-base-content/60">
+      Selecciona tus ingredientes favoritos y alérgenos para personalizar tus recomendaciones.
     </p>
   </div>
 
   @if (!auth.isLoggedIn()) {
-    <div class="info-box">
-      <p class="info-box-text">
-        Debes <a routerLink="/login" class="link-amber">iniciar sesion</a> para guardar tus preferencias.
-      </p>
+    <div class="alert  rounded-2xl shadow-sm">
+      <span class="text-sm font-semibold">
+        Debes <a routerLink="/login" class="link link-primary font-bold">iniciar sesión</a> para guardar tus preferencias.
+      </span>
     </div>
   } @else {
     <!-- Favorite Ingredients -->
-    <section class="preferences-section">
-      <div class="section-heading">
-        <div class="section-indicator indicator-amber-small"></div>
-        <h2 class="section-title">Ingredientes Favoritos</h2>
+    <section class="flex flex-col gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-1.5 h-5 rounded-full bg-primary"></div>
+        <h2 class="text-xl font-extrabold text-base-content">Ingredientes Favoritos</h2>
       </div>
-      <p class="section-description">
-        El FYP recomendara mas recetas que contengan estos ingredientes.
+      <p class="text-xs text-base-content/60">
+        El buscador y recomendador priorizará recetas que contengan estos ingredientes.
       </p>
-      <div class="chip-group">
+      <div class="flex flex-wrap gap-2 mt-1">
         @for (ing of allIngredients(); track ing) {
           <button
             (click)="toggleFav(ing)"
-            class="chip"
-            [class.chip-amber-active]="isFav(ing)"
+            class="btn btn-xs md:btn-sm rounded-full normal-case font-semibold"
+            [class.btn-primary]="isFav(ing)"
+            [class.btn-outline]="!isFav(ing)"
           >
             {{ ing }}
           </button>
@@ -37,42 +38,45 @@
     </section>
 
     <!-- Intolerances and Common Allergies -->
-    <section class="preferences-section">
-      <div class="section-heading">
-        <div class="section-indicator indicator-red-small"></div>
-        <h2 class="section-title">Intolerancias y Alergias Comunes</h2>
+    <section class="flex flex-col gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-1.5 h-5 rounded-full bg-error"></div>
+        <h2 class="text-xl font-extrabold text-base-content">Intolerancias y Alergias Comunes</h2>
       </div>
-      <p class="section-description">
+      <p class="text-xs text-base-content/60">
         Selecciona tus intolerancias o alergias generales. Excluiremos automáticamente recetas con ingredientes relacionados (ej. lácteos, trigo/gluten, pescados/mariscos, frutos secos, huevo).
       </p>
-      <div class="card-group">
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1">
         @for (intolerance of availableIntolerances; track intolerance) {
           <button
             (click)="toggleIntolerance(intolerance)"
-            class="intolerance-card"
-            [class.card-red-active]="isIntolerance(intolerance)"
+            class="btn h-16 flex flex-col justify-center items-center rounded-2xl border transition-all text-center normal-case shadow-sm"
+            [class.btn-error]="isIntolerance(intolerance)"
+            [class.btn-outline]="!isIntolerance(intolerance)"
+            [class.border-base-200]="!isIntolerance(intolerance)"
           >
-            <span class="card-title">{{ intolerance }}</span>
+            <span class="font-bold text-sm">{{ intolerance }}</span>
           </button>
         }
       </div>
     </section>
 
     <!-- Allergens -->
-    <section class="preferences-section">
-      <div class="section-heading">
-        <div class="section-indicator indicator-red-small"></div>
-        <h2 class="section-title">Alergias a Ingredientes Específicos</h2>
+    <section class="flex flex-col gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-1.5 h-5 rounded-full bg-error"></div>
+        <h2 class="text-xl font-extrabold text-base-content">Alergias a Ingredientes Específicos</h2>
       </div>
-      <p class="section-description">
+      <p class="text-xs text-base-content/60">
         Si eres alérgico a algún otro alimento en particular, selecciónalo aquí para excluirlo de tus recomendaciones.
       </p>
-      <div class="chip-group">
+      <div class="flex flex-wrap gap-2 mt-1">
         @for (ing of allIngredients(); track ing) {
           <button
             (click)="toggleAllergen(ing)"
-            class="chip"
-            [class.chip-red-active]="isAllergen(ing)"
+            class="btn btn-xs md:btn-sm rounded-full normal-case font-semibold"
+            [class.btn-error]="isAllergen(ing)"
+            [class.btn-outline]="!isAllergen(ing)"
           >
             {{ ing }}
           </button>
@@ -80,12 +84,12 @@
       </div>
     </section>
 
-    <!-- Info -->
-    <div class="info-box">
-      <p class="info-box-text">
-        Los cambios se guardan automáticamente en tu cuenta. El FYP se ajustará para recomendarte
+    <!-- Info Box -->
+    <div class="alert alert-success bg-success/5 border-success/20 rounded-2xl shadow-sm text-xs font-semibold leading-relaxed flex items-start gap-3 mt-4">
+      <span class="text-base-content/85">
+        Los cambios se guardan automáticamente en tu cuenta. El buscador se ajustará para recomendarte
         recetas con tus ingredientes favoritos y evitar tus alérgenos e intolerancias.
-      </p>
+      </span>
     </div>
   }
 </div>

@@ -1,56 +1,64 @@
-<aside class="sidebar">
-  <div class="sidebar-content">
-    <h3 class="nav-section-title">Menú Principal</h3>
-    <nav class="nav-list">
-      <a
-        routerLink="/"
-        routerLinkActive="active"
+<aside 
+  class="w-64 h-[calc(100vh-4rem)] fixed left-0 top-16 bg-base-100 border-r border-base-200 overflow-y-auto z-40 max-md:-translate-x-full transition-transform duration-300 ease-in-out"
+  [class.max-md:translate-x-0]="sidebarService.isOpen()"
+  [class.max-md:shadow-2xl]="sidebarService.isOpen()"
+>
+  <ul class="menu menu-md p-4 w-full text-base-content gap-0.5">
+    <li class="menu-title text-xs font-semibold tracking-wider text-base-content/50 uppercase mb-2 pl-3">Menú Principal</li>
+    <li>
+      <a 
+        routerLink="/" 
+        routerLinkActive="active bg-primary/10 text-primary" 
         [routerLinkActiveOptions]="{exact: true}"
-        class="nav-item"
+        (click)="sidebarService.close()"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm"
       >
-        <ng-icon name="heroHome" size="20" class="nav-icon" />
-        <span class="nav-text">Inicio</span>
+        <ng-icon name="heroHome" size="18" />
+        <span>Inicio</span>
       </a>
-
-      <a
-        routerLink="/forum"
-        routerLinkActive="active"
-        class="nav-item"
+    </li>
+    <li>
+      <a 
+        routerLink="/forum" 
+        routerLinkActive="active bg-primary/10 text-primary"
+        (click)="sidebarService.close()"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm"
       >
-        <ng-icon name="heroChatBubbleLeftRight" size="20" class="nav-icon" />
-        <span class="nav-text">Foro / Reseñas</span>
+        <ng-icon name="heroChatBubbleLeftRight" size="18" />
+        <span>Foro / Reseñas</span>
       </a>
-    </nav>
+    </li>
 
-    <div class="nav-divider">
-      <h3 class="nav-section-title">Categorías</h3>
-      <nav class="nav-list">
-        @for (cat of categories; track cat.slug) {
-          <a
-            [routerLink]="['/category', cat.slug]"
-            routerLinkActive="active"
-            class="nav-item group"
-          >
-            <ng-icon [name]="cat.icon" size="20" class="nav-icon" />
-            <span class="nav-text flex-1">{{ cat.label }}</span>
-            <ng-icon name="heroChevronRight" size="16" class="nav-chevron" />
-          </a>
-        }
-      </nav>
-    </div>
+    <div class="divider my-3 opacity-50"></div>
 
-    <div class="nav-divider">
-      <h3 class="nav-section-title">Configuración</h3>
-      <nav class="nav-list">
-        <a
-          routerLink="/preferences"
-          routerLinkActive="active"
-          class="nav-item"
+    <li class="menu-title text-xs font-semibold tracking-wider text-base-content/50 uppercase mb-2 pl-3">Categorías</li>
+    @for (cat of categories; track cat.slug) {
+      <li>
+        <a 
+          [routerLink]="['/category', cat.slug]" 
+          routerLinkActive="active bg-primary/10 text-primary"
+          (click)="sidebarService.close()"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm"
         >
-          <ng-icon name="heroCog6Tooth" size="20" class="nav-icon" />
-          <span class="nav-text">Preferencias</span>
+          <ng-icon [name]="cat.icon" size="18" />
+          <span>{{ cat.label }}</span>
         </a>
-      </nav>
-    </div>
-  </div>
+      </li>
+    }
+
+    <div class="divider my-3 opacity-50"></div>
+
+    <li class="menu-title text-xs font-semibold tracking-wider text-base-content/50 uppercase mb-2 pl-3">Configuración</li>
+    <li>
+      <a 
+        routerLink="/preferences" 
+        routerLinkActive="active bg-primary/10 text-primary"
+        (click)="sidebarService.close()"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm"
+      >
+        <ng-icon name="heroCog6Tooth" size="18" />
+        <span>Preferencias</span>
+      </a>
+    </li>
+  </ul>
 </aside>

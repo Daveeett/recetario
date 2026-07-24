@@ -1,25 +1,32 @@
-<div class="page-layout animate-fade-in">
-  <h2 class="page-title">Resultados de busqueda</h2>
-  @if (query(); as q) {
-    <p class="page-subtitle">
-      Mostrando resultados para <strong>"{{ q }}"</strong>
-    </p>
-  }
+<div class="max-w-[1440px] mx-auto flex flex-col gap-6 animate-fade-in">
+  <!-- Search Header -->
+  <div class="flex flex-col gap-1">
+    <div class="flex items-center gap-3">
+      <div class="w-1.5 h-6 rounded-full bg-primary"></div>
+      <h2 class="text-2xl font-bold text-base-content">Resultados de búsqueda</h2>
+    </div>
+    @if (query(); as q) {
+      <p class="text-sm text-base-content/60 pl-4">
+        Mostrando resultados para <span class="badge badge-neutral font-bold">"{{ q }}"</span>
+      </p>
+    }
+  </div>
 
+  <!-- Search Results -->
   @if (results().length > 0) {
-    <div class="recipe-grid animate-stagger">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-stagger">
       @for (recipe of results(); track recipe.id) {
         <app-recipe-card [recipe]="recipe" />
       }
     </div>
   } @else if (query()) {
-    <div class="empty-state-large">
-      <p class="empty-state-large-title">No se encontraron recetas para "{{ query() }}"</p>
-      <p class="empty-state-large-subtitle">Prueba con otro termino de busqueda.</p>
+    <div class="p-12 bg-base-100 border border-base-200 border-dashed rounded-3xl text-center">
+      <p class="text-base-content/60 text-sm font-bold">No se encontraron recetas para "{{ query() }}"</p>
+      <p class="text-base-content/40 text-xs mt-1">Prueba con otro término de búsqueda o ingrediente.</p>
     </div>
   } @else {
-    <div class="empty-state-large">
-      <p class="empty-state-large-title">Escribe algo para buscar recetas o ingredientes.</p>
+    <div class="p-12 bg-base-100 border border-base-200 border-dashed rounded-3xl text-center">
+      <p class="text-base-content/50 text-sm font-bold">Escribe algo para buscar recetas o ingredientes.</p>
     </div>
   }
 </div>

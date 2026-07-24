@@ -1,111 +1,182 @@
-<div class="forum-container animate-fade-in">
-  <div class="forum-header">
-    <div class="forum-title-group">
-      <h1 class="page-title">Foro de la Comunidad</h1>
-      <p class="page-subtitle">Pide próximas recetas, deja reseñas y comparte tu feedback con nosotros.</p>
+<div class="max-w-3xl mx-auto flex flex-col gap-6 animate-fade-in">
+  <!-- Forum Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+    <div class="flex-1">
+      <h1 class="text-3xl font-black text-base-content">Foro de la Comunidad</h1>
+      <p class="text-sm text-base-content/60 mt-1">Pide próximas recetas, deja reseñas y comparte tu feedback con nosotros.</p>
     </div>
     
     @if (auth.isLoggedIn()) {
-      <button (click)="showForm.set(!showForm())" class="btn btn-primary new-post-btn">
+      <button (click)="showForm.set(!showForm())" class="btn btn-primary rounded-full btn-sm md:btn-md gap-2 shadow-sm">
         <ng-icon name="heroPencilSquare" size="18" />
         {{ showForm() ? 'Cancelar' : 'Nueva Publicación' }}
       </button>
     } @else {
-      <div class="auth-prompt-banner">
-        <p>¿Quieres pedir una receta o dejar una reseña? <a routerLink="/login" class="link-amber">Inicia sesión aquí</a></p>
+      <div class="alert  rounded-2xl shadow-sm text-sm p-3 max-w-sm">
+        <span>¿Quieres participar? <a routerLink="/login" class="link link-primary font-bold">Inicia sesión aquí</a></span>
       </div>
     }
   </div>
 
   <!-- Formulario para crear post -->
   @if (showForm() && auth.isLoggedIn()) {
-    <div class="post-form-card animate-slide-up">
-      <h3 class="form-title">Crear nueva publicación</h3>
+    <div class="card bg-base-100 border border-base-200 shadow-md p-6 animate-slide-up">
+      <h3 class="card-title text-lg font-extrabold text-base-content mb-4">Crear nueva publicación</h3>
+      
       @if (createError()) {
-        <div class="error-box"><p>{{ createError() }}</p></div>
+        <div class="alert alert-error shadow-sm rounded-2xl mb-4 text-xs font-bold">
+          <span>{{ createError() }}</span>
+        </div>
       }
-      <form (ngSubmit)="submitPost()" class="create-form">
-        <div class="form-group">
-          <label class="form-label">Título</label>
-          <input type="text" [(ngModel)]="newTitle" name="title" class="form-control" placeholder="Ej. Por favor suban receta de Tacos de Birria" required />
+      
+      <form (ngSubmit)="submitPost()" class="flex flex-col gap-4">
+        <div class="form-control w-full">
+          <label class="label py-1">
+            <span class="label-text font-bold text-xs uppercase text-base-content/50">Título</span>
+          </label>
+          <input 
+            type="text" 
+            [(ngModel)]="newTitle" 
+            name="title" 
+            class="input input-bordered w-full focus:input-primary text-sm" 
+            placeholder="Ej. Por favor suban receta de Tacos de Birria" 
+            required 
+          />
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Tipo de publicación</label>
-            <select [(ngModel)]="newPostType" name="postType" class="form-control select-control">
-              <option value="request">Pedir próxima receta</option>
-              <option value="review">Reseña o Comentario general</option>
-            </select>
-          </div>
+        <div class="form-control w-full">
+          <label class="label py-1">
+            <span class="label-text font-bold text-xs uppercase text-base-content/50">Tipo de publicación</span>
+          </label>
+          <select [(ngModel)]="newPostType" name="postType" class="select select-bordered w-full focus:select-primary text-sm">
+            <option value="request">Pedir próxima receta</option>
+            <option value="review">Reseña o Comentario general</option>
+          </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Detalles / Contenido</label>
-          <textarea [(ngModel)]="newContent" name="content" class="form-control text-area-control" rows="5" placeholder="Cuéntanos más detalles..." required></textarea>
+        <div class="form-control w-full">
+          <label class="label py-1">
+            <span class="label-text font-bold text-xs uppercase text-base-content/50">Detalles / Contenido</span>
+          </label>
+          <textarea 
+            [(ngModel)]="newContent" 
+            name="content" 
+            class="textarea textarea-bordered w-full h-32 focus:textarea-primary text-sm" 
+            placeholder="Cuéntanos más detalles..." 
+            required
+          ></textarea>
         </div>
 
-        <button type="submit" [disabled]="creating()" class="btn btn-primary submit-btn">
-          {{ creating() ? 'Publicando...' : 'Publicar' }}
+        <button type="submit" [disabled]="creating()" class="btn btn-primary rounded-full w-fit self-end px-8 shadow-sm">
+          @if (creating()) {
+            <span class="loading loading-spinner loading-xs"></span>
+            <span>Publicando...</span>
+          } @else {
+            <span>Publicar</span>
+          }
         </button>
       </form>
     </div>
   }
 
-  <!-- Filtros e información -->
-  <div class="forum-filters-toolbar">
-    <div class="filter-tabs">
-      <button (click)="setFilter('all')" class="filter-tab" [class.active]="filterType() === 'all'">Todos</button>
-      <button (click)="setFilter('request')" class="filter-tab" [class.active]="filterType() === 'request'">Peticiones</button>
-      <button (click)="setFilter('review')" class="filter-tab" [class.active]="filterType() === 'review'">Reseñas</button>
+  <!-- Filtros e información toolbar -->
+  <div class="flex flex-wrap items-center justify-between gap-4 py-2 border-b border-base-200">
+    <div class="join bg-base-200/50 p-0.5 rounded-full border border-base-200">
+      <button 
+        (click)="setFilter('all')" 
+        class="btn btn-xs md:btn-sm rounded-full join-item border-transparent" 
+        [class.btn-primary]="filterType() === 'all'" 
+        [class.btn-ghost]="filterType() !== 'all'"
+      >Todos</button>
+      <button 
+        (click)="setFilter('request')" 
+        class="btn btn-xs md:btn-sm rounded-full join-item border-transparent" 
+        [class.btn-primary]="filterType() === 'request'" 
+        [class.btn-ghost]="filterType() !== 'request'"
+      >Peticiones</button>
+      <button 
+        (click)="setFilter('review')" 
+        class="btn btn-xs md:btn-sm rounded-full join-item border-transparent" 
+        [class.btn-primary]="filterType() === 'review'" 
+        [class.btn-ghost]="filterType() !== 'review'"
+      >Reseñas</button>
     </div>
 
-    <div class="sort-selector">
-      <span class="sort-label">Ordenar por:</span>
-      <button (click)="setSort('newest')" class="sort-btn" [class.active]="sortType() === 'newest'">Recientes</button>
-      <button (click)="setSort('popular')" class="sort-btn" [class.active]="sortType() === 'popular'">Populares</button>
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold text-base-content/40 uppercase">Ordenar:</span>
+      <button 
+        (click)="setSort('newest')" 
+        class="btn btn-xs rounded-full font-bold" 
+        [class.btn-neutral]="sortType() === 'newest'" 
+        [class.btn-ghost]="sortType() !== 'newest'"
+      >Recientes</button>
+      <button 
+        (click)="setSort('popular')" 
+        class="btn btn-xs rounded-full font-bold" 
+        [class.btn-neutral]="sortType() === 'popular'" 
+        [class.btn-ghost]="sortType() !== 'popular'"
+      >Populares</button>
     </div>
   </div>
 
   <!-- Listado de Posts -->
   @if (loading()) {
-    <div class="forum-loading-state">
-      <p>Cargando publicaciones del foro...</p>
+    <div class="flex justify-center items-center py-16">
+      <span class="loading loading-spinner loading-md text-primary"></span>
     </div>
   } @else if (posts().length > 0) {
-    <div class="posts-list">
+    <div class="flex flex-col gap-4">
       @for (post of posts(); track post.id) {
-        <div class="post-card">
-          <div class="post-card-header">
-            <div class="post-user-info">
-              <div class="user-avatar">
-                <ng-icon name="heroUser" size="18" />
+        <div class="card bg-base-100 border border-base-200 shadow-sm p-5 flex flex-col gap-4">
+          <!-- Header (User + Badge) -->
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+              <div class="avatar placeholder">
+                <div class="bg-neutral text-neutral-content rounded-full w-9 h-8">
+                  <div class="ml-2 mt-1"><ng-icon name="heroUser" size="20" clas  /></div>
+                  
+                </div>
               </div>
-              <div class="user-meta-details">
-                <span class="post-username">{{ post.username }}</span>
-                <span class="post-date">{{ post.createdAt  }}</span>
+              <div class="flex flex-col text-left">
+                <span class="font-bold text-sm text-base-content">{{ post.username }}</span>
+                <span class="text-[10px] text-base-content/50 font-medium">{{ post.createdAt }}</span>
               </div>
             </div>
             
-            <span class="post-type-badge" [class.badge-request]="post.postType === 'request'" [class.badge-review]="post.postType === 'review'">
+            <span 
+              class="badge badge-primary text-xs font-bold py-2.5 px-3"
+              [class.badge-info]="post.postType === 'request'"
+              [class.badge-success]="post.postType === 'review'"
+            >
               {{ post.postType === 'request' ? 'Petición' : 'Reseña' }}
             </span>
           </div>
 
-          <div class="post-card-body">
-            <h3 class="post-title">{{ post.title }}</h3>
-            <p class="post-content">{{ post.content }}</p>
+          <!-- Body -->
+          <div class="flex flex-col gap-1">
+            <h3 class="font-extrabold text-base text-base-content">{{ post.title }}</h3>
+            <p class="text-sm text-base-content/80 leading-relaxed whitespace-pre-line">{{ post.content }}</p>
           </div>
 
-          <div class="post-card-footer">
-            <button (click)="toggleLike(post)" class="like-btn" [class.liked]="post.userHasLiked" [disabled]="!auth.isLoggedIn()">
-              <ng-icon name="heroHandThumbUp" size="16" />
+          <!-- Footer (Like + Actions) -->
+          <div class="flex items-center justify-between border-t border-base-200 pt-3 mt-1">
+            <button 
+              (click)="toggleLike(post)" 
+              class="btn btn-xs rounded-full gap-1.5 border-base-300 font-semibold" 
+              [class.btn-primary]="post.userHasLiked" 
+              [class.btn-outline]="!post.userHasLiked"
+              [disabled]="!auth.isLoggedIn()"
+            >
+              <ng-icon name="heroHandThumbUp" size="14" />
               <span>{{ post.likesCount }} {{ post.likesCount === 1 ? 'Me gusta' : 'Me gustas' }}</span>
             </button>
 
             @if (auth.isLoggedIn() && (auth.user()?.id === post.userId || auth.user()?.role === 'admin')) {
-              <button (click)="deletePost(post.id)" class="delete-btn">
-                <ng-icon name="heroXMark" size="16" />
+              <button 
+                (click)="deletePost(post.id)" 
+                class="btn btn-xs btn-ghost text-error/80 hover:text-error gap-1 rounded-full"
+              >
+                <ng-icon name="heroXMark" size="14" />
                 <span>Eliminar</span>
               </button>
             }
@@ -114,9 +185,9 @@
       }
     </div>
   } @else {
-    <div class="empty-state-large">
-      <p class="empty-state-large-title">No hay publicaciones disponibles</p>
-      <p class="empty-state-large-subtitle">Sé el primero en dejar una reseña o solicitar una receta.</p>
+    <div class="p-12 bg-base-100 border border-base-200 border-dashed rounded-3xl text-center">
+      <p class="text-base-content/50 text-sm font-bold">No hay publicaciones disponibles</p>
+      <p class="text-base-content/40 text-xs mt-1">Sé el primero en dejar una reseña o solicitar una receta.</p>
     </div>
   }
 </div>

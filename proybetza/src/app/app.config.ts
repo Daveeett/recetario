@@ -7,7 +7,8 @@ import {
   heroChevronRight, heroArrowRight, heroExclamationTriangle,
   heroCake, heroFire, heroSparkles, heroStar, heroBeaker,
   heroUser, heroArrowRightOnRectangle, heroPencilSquare,
-  heroHandThumbUp, heroChatBubbleLeftRight, heroXMark
+  heroHandThumbUp, heroChatBubbleLeftRight, heroXMark,
+  heroSun, heroMoon, heroBars3
 } from '@ng-icons/heroicons/outline';
 import { routes } from './app.routes';
 import { authInterceptor } from './guards/auth.interceptor';
@@ -23,7 +24,8 @@ export const appConfig: ApplicationConfig = {
       heroArrowRight, heroExclamationTriangle,
       heroCake, heroFire, heroSparkles, heroStar, heroBeaker,
       heroUser, heroArrowRightOnRectangle, heroPencilSquare,
-      heroHandThumbUp, heroChatBubbleLeftRight, heroXMark
+      heroHandThumbUp, heroChatBubbleLeftRight, heroXMark,
+      heroSun, heroMoon, heroBars3
     }),
   ],
 };

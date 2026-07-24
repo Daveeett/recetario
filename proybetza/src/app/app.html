@@ -5,6 +5,9 @@
 } @else {
   <app-top-nav />
   <app-sidebar />
+  @if (sidebarService.isOpen()) {
+    <div class="sidebar-backdrop" (click)="sidebarService.close()"></div>
+  }
   <main class="app-layout">
     <div class="app-container animate-fade-in">
       <router-outlet />

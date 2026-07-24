@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgIconComponent } from '@ng-icons/core';
 import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-top-nav',
@@ -13,6 +15,8 @@ import { AuthService } from '../../services/auth.service';
 export class TopNavComponent {
   readonly query = signal('');
   readonly auth = inject(AuthService);
+  readonly themeService = inject(ThemeService);
+  readonly sidebarService = inject(SidebarService);
   private router = inject(Router);
 
   search() {

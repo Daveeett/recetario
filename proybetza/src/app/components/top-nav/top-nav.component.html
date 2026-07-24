@@ -1,46 +1,81 @@
-<header class="top-nav">
-  <div class="top-nav-inner">
-    <a routerLink="/" class="brand">
-      <span class="brand-logo">CB</span>
-      <span class="brand-text">Mockup</span>
+<header class="navbar bg-base-100/95 backdrop-blur-md border-b border-base-200 fixed top-0 left-0 right-0 z-50 h-16 px-4 md:px-6 shadow-sm transition-all duration-300">
+  <!-- Menu Toggle & Logo -->
+  <div class="flex-none gap-2">
+    <button 
+      (click)="sidebarService.toggle()" 
+      class="btn btn-ghost btn-circle btn-sm md:hidden text-base-content" 
+      title="Menú"
+    >
+      <ng-icon name="heroBars3" size="20" />
+    </button>
+    <a routerLink="/" class="btn btn-ghost px-2 gap-2 hover:bg-transparent normal-case text-left hidden md:flex">
+      <span class="text-2xl font-black bg-primary bg-clip-text text-transparent">CB</span>
+      <span class="text-xl font-bold text-base-content hidden md:block">Mockup</span>
     </a>
-    
-    <div class="search-container">
-      <div class="search-input-wrapper">
-        <input
-          type="text"
-          [(ngModel)]="query"
-          (keyup.enter)="search()"
-          placeholder="Buscar recetas o ingredientes..."
-          class="search-input"
-        />
-        <ng-icon name="heroMagnifyingGlass" size="18" class="search-icon" />
-      </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="flex-1 max-w-lg mx-2 md:mx-8">
+    <div class="relative w-full flex items-center">
+      <ng-icon 
+        name="heroMagnifyingGlass" 
+        size="18" 
+        class="absolute left-3.5 text-base-content/40 pointer-events-none" 
+      />
+      <input
+        type="text"
+        [(ngModel)]="query"
+        (keyup.enter)="search()"
+        placeholder="Buscar recetas o ingredientes..."
+        class="input input-bordered input-sm w-full pl-10 rounded-full bg-base-200 focus:bg-base-100 focus:input-primary transition-all duration-200 text-sm placeholder-base-content/40"
+      />
     </div>
-    
-    <div class="nav-actions-group">
-      @if (auth.isLoggedIn()) {
-        <a routerLink="/preferences" class="nav-action">
-          <ng-icon name="heroHeart" size="20" />
-          <span class="nav-action-text">Favoritos</span>
-        </a>
+  </div>
 
-        <div class="user-profile-badge">
-          <ng-icon name="heroUser" size="18" />
-          <span class="username-display">{{ auth.user()?.username }}</span>
-        </div>
-
-        <button (click)="logout()" class="logout-action-btn" title="Cerrar Sesión">
-          <ng-icon name="heroArrowRightOnRectangle" size="20" />
-        </button>
+  <!-- Right Actions -->
+  <div class="flex-none gap-1 md:gap-3">
+    <!-- Theme Toggle -->
+    <button 
+      (click)="themeService.toggleTheme()" 
+      class="btn btn-ghost btn-circle btn-sm text-base-content" 
+      [title]="themeService.isDark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+    >
+      @if (themeService.isDark()) {
+        <ng-icon name="heroSun" size="18" />
       } @else {
-        <a routerLink="/login" class="login-link-btn">
-          <span>Iniciar Sesión</span>
-        </a>
-        <a routerLink="/register" class="btn btn-primary register-link-btn">
-          <span>Registrarse</span>
-        </a>
+        <ng-icon name="heroMoon" size="18" />
       }
-    </div>
+    </button>
+
+    @if (auth.isLoggedIn()) {
+      <!-- Favorites -->
+      <a routerLink="/preferences" class="btn btn-ghost btn-sm text-base-content gap-2 normal-case">
+        <ng-icon name="heroHeart" size="18" class="text-primary" />
+        <span class="hidden sm:inline">Favoritos</span>
+      </a>
+
+      <!-- Profile Badge -->
+      <div class="badge badge-neutral gap-2 py-3 px-4 font-semibold text-sm">
+        <ng-icon name="heroUser" size="16" />
+        <span class="max-w-[120px] truncate hidden md:inline">{{ auth.user()?.username }}</span>
+      </div>
+
+      <!-- Logout -->
+      <button 
+        (click)="logout()" 
+        class="btn btn-ghost btn-circle btn-sm text-error hover:bg-error/10" 
+        title="Cerrar Sesión"
+      >
+        <ng-icon name="heroArrowRightOnRectangle" size="18" />
+      </button>
+    } @else {
+      <!-- Login & Register -->
+      <a routerLink="/login" class="btn btn-ghost btn-sm rounded-full normal-case text-base-content">
+        Iniciar Sesión
+      </a>
+      <a routerLink="/register" class="btn btn-primary btn-sm rounded-full normal-case text-primary-content">
+        Registrarse
+      </a>
+    }
   </div>
 </header>
