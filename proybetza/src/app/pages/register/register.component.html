@@ -60,6 +60,21 @@
         />
       </div>
 
+      <div class="form-control w-full">
+        <label for="confirmPassword" class="label py-1">
+          <span class="label-text font-bold text-xs uppercase text-base-content/60">Confirmar Contraseña</span>
+        </label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          class="input input-bordered focus:input-primary text-sm w-full"
+          placeholder="Vuelve a ingresar tu contraseña"
+          required
+        />
+      </div>
+
       <button type="submit" [disabled]="loading()" class="btn btn-primary rounded-full w-full shadow-sm mt-2">
         @if (loading()) {
           <span class="loading loading-spinner loading-xs"></span>

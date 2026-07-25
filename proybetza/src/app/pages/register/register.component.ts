@@ -16,12 +16,17 @@ export default class RegisterComponent {
   readonly username = signal('');
   readonly email = signal('');
   readonly password = signal('');
+  readonly confirmPassword = signal('');
   readonly loading = signal(false);
   readonly error = signal('');
 
   submit(): void {
-    if (!this.username() || !this.email() || !this.password()) {
+    if (!this.username() || !this.email() || !this.password() || !this.confirmPassword()) {
       this.error.set('Completa todos los campos');
+      return;
+    }
+    if (this.password() !== this.confirmPassword()) {
+      this.error.set('Las contraseñas no coinciden');
       return;
     }
     this.loading.set(true);
